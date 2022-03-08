@@ -5,4 +5,5 @@ export default interface CRUD {
   readById: (id: string) => Promise<any>;
   deleteById: (id: string) => Promise<string>;
   patchById: (id: string, resource: any) => Promise<string>;
+  readAssociationsById: (id: string) => Promise<any>;
 }

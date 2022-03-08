@@ -21,12 +21,3 @@ class TransactionService {
 }
 
 export default new TransactionService();
-
-/**
- * -
- * - create schema
- * - handle errors
- * - validate
- * - add openAPI documentation
- *
- */

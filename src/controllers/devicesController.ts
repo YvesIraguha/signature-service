@@ -35,6 +35,14 @@ class DevicesController {
     log(await DevicesService.deleteById(req.params.deviceId));
     res.status(204).send();
   }
+
+  async getDevicesTransactions(req: Request, res: Response) {
+    log(req.params);
+    const device = await DevicesService.readAssociationsById(
+      req.params.deviceId
+    );
+    res.status(200).send({ data: device });
+  }
 }
 
 export default new DevicesController();

@@ -32,9 +32,7 @@ class DeviceDA {
   }
 
   async getDevices(limit = 25, page = 0) {
-    return this.DeviceModel.findAll({
-      include: { model: this.TxModel, as: "transactions" },
-    });
+    return this.DeviceModel.findAll();
   }
 
   async updateDeviceById(
@@ -50,6 +48,12 @@ class DeviceDA {
 
   async removeDeviceById(id: string) {
     return this.DeviceModel.destroy({ where: { id } });
+  }
+
+  async getDeviceWithTransactions(id: string) {
+    return this.DeviceModel.findByPk(id, {
+      include: { model: this.TxModel, as: "transactions" },
+    });
   }
 }
 

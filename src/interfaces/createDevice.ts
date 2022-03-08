@@ -1,6 +1,12 @@
+export type status = "ACTIVE" | "DEACTIVATED";
 export default interface CreateDeviceInput {
-  id: string;
+  certificate: string;
   publicKey: string;
-  label: string;
-  signedTransactions: number;
+  privateKey: string;
+  signatureAlgorithm: string;
+  transactionDataEncoding: string;
+  numberOfSignedTransactions: number;
+  id: string;
+  description: string;
+  status: status;
 }
