@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import debug from "debug";
-import DevicesService from "../services/deviceService";
+import { Request, Response } from 'express';
+import debug from 'debug';
+import DevicesService from '../services/deviceService';
 
-const log: debug.IDebugger = debug("app:devices-controller");
+const log: debug.IDebugger = debug('app:devices-controller');
 
 class DevicesController {
   async listDevices(req: Request, res: Response) {

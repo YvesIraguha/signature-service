@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { validateBody } from "../helpers";
-import { deviceSchema, transactionSchema } from "../schema";
+import { NextFunction, Request, Response } from 'express';
+import { validateBody } from '../helpers';
+import { deviceSchema, transactionSchema } from '../schema';
 
 export const validateDeviceSchema = async (
   req: Request,

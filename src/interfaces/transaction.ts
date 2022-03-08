@@ -1,10 +1,3 @@
-interface Item {
-  type: string;
-  quantity: string;
-  pricePerUnit: string;
-  totalAmount: string;
-}
-
 interface Signature {
   value: string;
   algorithm: string;
@@ -22,6 +15,8 @@ export default interface SignTransactionInput {
   price: number;
   currency: string;
   paymentMethod: string;
+  quantity: number;
+  totalAmount: number;
   item: string;
   id: string;
 }

@@ -1,9 +1,9 @@
-import DeviceDA from "../dataAccess/devices";
-import CRUD from "../interfaces/CRUD";
+import DeviceDA from '../dataAccess/devices';
+import CRUD from '../interfaces/CRUD';
 
-import CreateDeviceInput from "../interfaces/createDevice";
-import PutDeviceInput from "../interfaces/putDevice";
-import PatchDeviceInput from "../interfaces/patchDevice";
+import CreateDeviceInput from '../interfaces/createDevice';
+import PutDeviceInput from '../interfaces/putDevice';
+import PatchDeviceInput from '../interfaces/patchDevice';
 
 class DevicesService implements CRUD {
   async create(resource: CreateDeviceInput) {

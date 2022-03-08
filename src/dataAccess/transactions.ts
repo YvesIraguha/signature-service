@@ -1,16 +1,16 @@
-import { v4 as uuidv4 } from "uuid";
-import debug from "debug";
-import models from "../../models";
+import { v4 as uuidv4 } from 'uuid';
+import debug from 'debug';
+import models from '../../models';
 
-import SignTransactionInput from "../interfaces/transaction";
+import SignTransactionInput from '../interfaces/transaction';
 
-const log: debug.IDebugger = debug("app:signature-device-da");
+const log: debug.IDebugger = debug('app:signature-device-da');
 
 class TransactionDA {
   TransactionModel = models.Transaction;
 
   constructor() {
-    log("Created a new instance of signature device DA");
+    log('Created a new instance of signature device DA');
   }
 
   async addTransaction(transactionFields: SignTransactionInput) {
@@ -18,7 +18,7 @@ class TransactionDA {
     log(typeof id, typeof transactionFields.deviceId);
     const transaction = {
       ...transactionFields,
-      id,
+      id
     };
     const newTransaction = await this.TransactionModel.create(transaction);
     return newTransaction;

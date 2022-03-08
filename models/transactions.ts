@@ -1,6 +1,6 @@
-"use strict";
-import { Model, UUIDV4 } from "sequelize";
-import TransactionAttributes from "../src/interfaces/transaction";
+'use strict';
+import { Model, UUIDV4 } from 'sequelize';
+import TransactionAttributes from '../src/interfaces/transaction';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Transaction
@@ -21,14 +21,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
     paymentMethod!: string;
     item!: string;
     id!: string;
+    quantity!: number;
+    totalAmount!: number;
 
     static associate(models: any) {
       Transaction.belongsTo(models.Device, {
         foreignKey: {
           allowNull: false,
-          name: "deviceId",
+          name: 'deviceId'
           // type: DataTypes.UUID,
-        },
+        }
       });
     }
   }
@@ -38,37 +40,45 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         defaultValue: UUIDV4,
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
       },
       deviceId: {
         type: DataTypes.UUID,
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
       },
       timeOfTransaction: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: false
       },
       place: { type: DataTypes.STRING, allowNull: false },
       price: { type: DataTypes.INTEGER, allowNull: false },
       currency: { type: DataTypes.STRING, allowNull: false },
       paymentMethod: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       item: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       number: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      totalAmount: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      }
     },
 
     {
       sequelize,
-      modelName: "Transaction",
+      modelName: 'Transaction'
     }
   );
   return Transaction;

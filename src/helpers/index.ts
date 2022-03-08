@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 type callback = (req: Request, res: Response) => Promise<any>;
 

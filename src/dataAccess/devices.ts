@@ -1,26 +1,26 @@
-import { v4 as uuidv4 } from "uuid";
-import debug from "debug";
-import models from "../../models";
+import { v4 as uuidv4 } from 'uuid';
+import debug from 'debug';
+import models from '../../models';
 
-import CreateDeviceInput from "../interfaces/createDevice";
-import PatchDeviceInput from "../interfaces/patchDevice";
-import PutDeviceInput from "../interfaces/putDevice";
+import CreateDeviceInput from '../interfaces/createDevice';
+import PatchDeviceInput from '../interfaces/patchDevice';
+import PutDeviceInput from '../interfaces/putDevice';
 
-const log: debug.IDebugger = debug("app:signature-device-da");
+const log: debug.IDebugger = debug('app:signature-device-da');
 
 class DeviceDA {
   DeviceModel = models.Device;
   TxModel = models.Transaction;
 
   constructor() {
-    log("Created a new instance of  device DA");
+    log('Created a new instance of  device DA');
   }
 
   async addDevice(deviceFields: CreateDeviceInput) {
     const id = uuidv4();
     const device = {
       ...deviceFields,
-      id,
+      id
     };
     const newDevice = await this.DeviceModel.create(device);
     return newDevice;
@@ -52,7 +52,7 @@ class DeviceDA {
 
   async getDeviceWithTransactions(id: string) {
     return this.DeviceModel.findByPk(id, {
-      include: { model: this.TxModel, as: "transactions" },
+      include: { model: this.TxModel, as: 'transactions' }
     });
   }
 }

@@ -1,6 +1,6 @@
-import TransactionDA from "../dataAccess/transactions";
-import SignTransactionInput from "../interfaces/transaction";
-import deviceService from "./deviceService";
+import TransactionDA from '../dataAccess/transactions';
+import SignTransactionInput from '../interfaces/transaction';
+import deviceService from './deviceService';
 
 class TransactionService {
   async createTransaction(resource: SignTransactionInput) {
@@ -15,7 +15,7 @@ class TransactionService {
 
     return {
       ...transaction,
-      signatureDevice,
+      signatureDevice
     };
   }
 }

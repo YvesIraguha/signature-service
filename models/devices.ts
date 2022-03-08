@@ -1,10 +1,9 @@
-"use strict";
-import { Model, UUIDV4 } from "sequelize";
-import CreateDeviceInput, { status } from "../src/interfaces/createDevice";
+'use strict';
+import { Model, UUIDV4 } from 'sequelize';
+import CreateDeviceInput, { status } from '../src/interfaces/createDevice';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Device extends Model<CreateDeviceInput> implements CreateDeviceInput {
-    certificate!: string;
     publicKey!: string;
     privateKey!: string;
     signatureAlgorithm!: string;
@@ -15,11 +14,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
     status!: status;
     static associate(models: any) {
       Device.hasMany(models.Transaction, {
-        sourceKey: "id",
+        sourceKey: 'id',
         foreignKey: {
-          name: "deviceId",
+          name: 'deviceId'
         },
-        as: "transactions",
+        as: 'transactions'
       });
     }
   }
@@ -29,44 +28,40 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         defaultValue: UUIDV4,
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
       },
       description: { type: DataTypes.STRING, allowNull: false },
       publicKey: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
-      certificate: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
+
       privateKey: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
       signatureAlgorithm: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       transactionDataEncoding: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       status: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       numberOfSignedTransactions: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     },
     {
       sequelize,
-      modelName: "Device",
+      modelName: 'Device'
     }
   );
   return Device;

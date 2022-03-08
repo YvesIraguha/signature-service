@@ -1,6 +1,5 @@
-export type status = "ACTIVE" | "DEACTIVATED";
+export type status = 'ACTIVE' | 'DEACTIVATED';
 export default interface CreateDeviceInput {
-  certificate: string;
   publicKey: string;
   privateKey: string;
   signatureAlgorithm: string;
