@@ -3,6 +3,8 @@ import debug from 'debug';
 import models from '../../models';
 
 import SignTransactionInput from '../interfaces/transaction';
+import deviceService from '../services/deviceService';
+import { signData } from '../helpers';
 
 const log: debug.IDebugger = debug('app:signature-device-da');
 
@@ -15,13 +17,28 @@ class TransactionDA {
 
   async addTransaction(transactionFields: SignTransactionInput) {
     const id = uuidv4();
-    log(typeof id, typeof transactionFields.deviceId);
     const transaction = {
       ...transactionFields,
       id
     };
-    const newTransaction = await this.TransactionModel.create(transaction);
-    return newTransaction;
+
+    const { privateKey, publicKey, numberOfSignedTransactions } =
+      await deviceService.readById(transactionFields.deviceId);
+
+    const signature = signData(transaction, privateKey);
+    await this.TransactionModel.create(transaction);
+    await deviceService.putById(
+      transactionFields.deviceId,
+      numberOfSignedTransactions + 1
+    );
+    return {
+      ...transaction,
+      signature: {
+        value: signature,
+        publicKey,
+        algorithm: 'rsa'
+      }
+    };
   }
 }
 

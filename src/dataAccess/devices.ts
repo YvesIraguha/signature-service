@@ -5,6 +5,7 @@ import models from '../../models';
 import CreateDeviceInput from '../interfaces/createDevice';
 import PatchDeviceInput from '../interfaces/patchDevice';
 import PutDeviceInput from '../interfaces/putDevice';
+import { generateKeyPair } from '../helpers/index';
 
 const log: debug.IDebugger = debug('app:signature-device-da');
 
@@ -18,9 +19,12 @@ class DeviceDA {
 
   async addDevice(deviceFields: CreateDeviceInput) {
     const id = uuidv4();
+    const { publicKey, privateKey } = generateKeyPair();
     const device = {
       ...deviceFields,
-      id
+      id,
+      publicKey,
+      privateKey
     };
     const newDevice = await this.DeviceModel.create(device);
     return newDevice;

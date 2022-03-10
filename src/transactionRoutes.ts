@@ -45,5 +45,11 @@ routes
     validateTransactionSchema,
     asyncHandler(TransactionsController.signTransaction)
   );
+routes
+  .route('/verify-tx')
+  .post(
+    validateTransactionSchema,
+    asyncHandler(TransactionsController.verifySignedTransaction)
+  );
 
 export default routes;

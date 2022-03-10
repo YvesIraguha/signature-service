@@ -12,6 +12,12 @@ class TransactionsController {
     log('transaction signed');
     res.status(200).send({ data: signedTransaction });
   }
+
+  async verifySignedTransaction(req: Request, res: Response) {
+    const isAuthentic = await TransactionService.verifySignedData(req.body);
+    log('verified');
+    res.status(200).send({ data: { isAuthentic } });
+  }
 }
 
 export default new TransactionsController();
