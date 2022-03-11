@@ -13,7 +13,10 @@ class DevicesController {
   async getDeviceById(req: Request, res: Response) {
     log(req.params);
     const device = await DevicesService.readById(req.params.deviceId);
-    res.status(200).send({ data: device });
+    if (device.id) {
+      return res.status(200).send({ data: device });
+    }
+    res.status(404).send({ error: 'There is not device with provided id' });
   }
 
   async createDevice(req: Request, res: Response) {
@@ -21,27 +24,34 @@ class DevicesController {
     res.status(201).send({ data: device });
   }
 
-  async patch(req: Request, res: Response) {
-    log(await DevicesService.patchById(req.params.id, req.body));
-    res.status(204).send();
-  }
-
   async put(req: Request, res: Response) {
-    log(await DevicesService.putById(req.params.deviceId, req.body));
-    res.status(204).send();
+    const [[numberOfUpdatedDevices], updatedDevice] =
+      await DevicesService.putById(req.params.deviceId, req.body);
+
+    if (numberOfUpdatedDevices) {
+      return res.status(201).send({
+        data: updatedDevice
+      });
+    }
+    res.status(404).send({ error: 'There is not device with provided id' });
   }
 
   async removeDevice(req: Request, res: Response) {
-    log(await DevicesService.deleteById(req.params.deviceId));
-    res.status(204).send();
+    const [deletedDevice] = await DevicesService.deleteById(
+      req.params.deviceId
+    );
+    if (deletedDevice) return res.status(204).send();
+    res.status(404).send({ error: 'There is not device with provided id' });
   }
 
   async getDevicesTransactions(req: Request, res: Response) {
-    log(req.params);
     const device = await DevicesService.readAssociationsById(
       req.params.deviceId
     );
-    res.status(200).send({ data: device });
+    if (device.id) {
+      return res.status(200).send({ data: device });
+    }
+    res.status(404).send({ error: 'There is not device with provided id' });
   }
 }
 

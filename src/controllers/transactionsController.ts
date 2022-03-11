@@ -7,16 +7,19 @@ const log: debug.IDebugger = debug('app:transaction-controller');
 class TransactionsController {
   async signTransaction(req: Request, res: Response) {
     const signedTransaction = await TransactionService.createSignature(
-      req.body
+      req.body.transaction,
+      req.body.signatureDevice
     );
     log('transaction signed');
-    res.status(200).send({ data: signedTransaction });
+    res.status(201).send({ data: signedTransaction });
   }
 
   async verifySignedTransaction(req: Request, res: Response) {
-    const isAuthentic = await TransactionService.verifySignedData(req.body);
+    const isAuthentic = await TransactionService.verifySignedData(
+      req.body.transaction
+    );
     log('verified');
-    res.status(200).send({ data: { isAuthentic } });
+    res.status(201).send({ data: { isAuthentic } });
   }
 }
 

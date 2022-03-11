@@ -1,16 +1,23 @@
 import TransactionDA from '../dataAccess/transactions';
-import SignTransactionInput from '../interfaces/transaction';
+import SignTransactionInput, { Transaction } from '../interfaces/transaction';
 import { verifySignature } from '../helpers/index';
+import CreateDeviceInput from '../interfaces/createDevice';
 
 class TransactionService {
-  async createTransaction(resource: SignTransactionInput) {
-    return TransactionDA.addTransaction(resource);
+  async createTransaction(
+    transactionInput: SignTransactionInput,
+    signingDevice: CreateDeviceInput
+  ) {
+    return TransactionDA.addTransaction(transactionInput, signingDevice);
   }
-  async createSignature(resource: SignTransactionInput) {
-    return TransactionDA.addTransaction(resource);
+  async createSignature(
+    transactionInput: SignTransactionInput,
+    signingDevice: CreateDeviceInput
+  ) {
+    return TransactionDA.addTransaction(transactionInput, signingDevice);
   }
 
-  async verifySignedData(resource: SignTransactionInput) {
+  async verifySignedData(resource: Transaction) {
     return verifySignature(
       resource,
       resource.signature.publicKey,

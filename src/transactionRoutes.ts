@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import TransactionsController from './controllers/transactionsController';
 import { asyncHandler } from './helpers';
-import { validateTransactionSchema } from './middleware/validator';
+import {
+  validateTransactionSchema,
+  validateSignedTransactionSchema
+} from './middleware/validator';
+import { checkSignatureDeviceExistence } from './middleware/checkSignatureDevice';
 const routes: Router = Router();
 
 /**
@@ -43,12 +47,13 @@ routes
   .route('/sign-tx')
   .post(
     validateTransactionSchema,
+    checkSignatureDeviceExistence,
     asyncHandler(TransactionsController.signTransaction)
   );
 routes
   .route('/verify-tx')
   .post(
-    validateTransactionSchema,
+    validateSignedTransactionSchema,
     asyncHandler(TransactionsController.verifySignedTransaction)
   );
 

@@ -24,30 +24,39 @@ class DeviceDA {
       ...deviceFields,
       id,
       publicKey,
-      privateKey
+      privateKey,
+      signatureAlgorithm: 'rsa',
+      transactionDataEncoding: 'utf-8',
+      status: 'ACTIVE',
+      numberOfSignedTransactions: 0
     };
+
     const newDevice = await this.DeviceModel.create(device);
     return newDevice;
   }
 
   async getDeviceById(id: string) {
     log(id);
-    return this.DeviceModel.findByPk(id);
+    return this.DeviceModel.findByPk(id, {
+      attributes: { exclude: ['privateKey'] }
+    });
   }
 
   async getDevices(limit = 25, page = 0) {
-    return this.DeviceModel.findAll();
+    return this.DeviceModel.findAll({
+      attributes: { exclude: ['privateKey'] }
+    });
   }
 
   async updateDeviceById(
     id: string,
     deviceFields: PutDeviceInput | PatchDeviceInput
   ) {
-    const existingDevice = await this.DeviceModel.update(
+    const updatedDevice = await this.DeviceModel.update(
       { ...deviceFields },
       { returning: true, where: { id } }
     );
-    return existingDevice;
+    return updatedDevice;
   }
 
   async removeDeviceById(id: string) {

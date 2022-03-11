@@ -5,6 +5,7 @@ import models from '../../models';
 import SignTransactionInput from '../interfaces/transaction';
 import deviceService from '../services/deviceService';
 import { signData } from '../helpers';
+import CreateDeviceInput from '../interfaces/createDevice';
 
 const log: debug.IDebugger = debug('app:signature-device-da');
 
@@ -15,22 +16,29 @@ class TransactionDA {
     log('Created a new instance of signature device DA');
   }
 
-  async addTransaction(transactionFields: SignTransactionInput) {
+  async addTransaction(
+    transactionFields: SignTransactionInput,
+    deviceFields: CreateDeviceInput
+  ) {
     const id = uuidv4();
     const transaction = {
       ...transactionFields,
       id
     };
 
-    const { privateKey, publicKey, numberOfSignedTransactions } =
-      await deviceService.readById(transactionFields.deviceId);
+    const {
+      privateKey,
+      publicKey,
+      numberOfSignedTransactions: signedTx
+    } = deviceFields;
 
     const signature = signData(transaction, privateKey);
+    const numberOfSignedTransactions = signedTx + 1;
     await this.TransactionModel.create(transaction);
-    await deviceService.putById(
-      transactionFields.deviceId,
-      numberOfSignedTransactions + 1
-    );
+    await deviceService.putById(transactionFields.deviceId, {
+      numberOfSignedTransactions
+    });
+
     return {
       ...transaction,
       signature: {

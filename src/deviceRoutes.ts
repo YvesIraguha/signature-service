@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import DevicesController from './controllers/devicesController';
 import { asyncHandler } from './helpers';
-import { validateDeviceSchema } from './middleware/validator';
+import {
+  validateDeviceSchema,
+  validateUUIDSchema,
+  validateOptionDeviceSchema
+} from './middleware/validator';
 
 const routes: Router = Router();
 /**
@@ -273,10 +277,18 @@ routes
 
 routes
   .route('/devices/:deviceId')
-  .get(asyncHandler(DevicesController.getDeviceById))
-  .delete(asyncHandler(DevicesController.removeDevice))
-  .put(asyncHandler(DevicesController.put))
-  .patch(asyncHandler(DevicesController.patch));
+  .get(validateUUIDSchema, asyncHandler(DevicesController.getDeviceById))
+  .delete(validateUUIDSchema, asyncHandler(DevicesController.removeDevice))
+  .put(
+    validateUUIDSchema,
+    validateDeviceSchema,
+    asyncHandler(DevicesController.put)
+  )
+  .patch(
+    validateUUIDSchema,
+    validateOptionDeviceSchema,
+    asyncHandler(DevicesController.put)
+  );
 
 /**
  * @swagger
@@ -306,6 +318,9 @@ routes
 
 routes
   .route('/devices/:deviceId/transactions')
-  .get(asyncHandler(DevicesController.getDevicesTransactions));
+  .get(
+    validateUUIDSchema,
+    asyncHandler(DevicesController.getDevicesTransactions)
+  );
 
 export default routes;

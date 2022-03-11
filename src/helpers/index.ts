@@ -12,9 +12,9 @@ export const asyncHandler =
     }
   };
 
-export const validateBody = async (data: any, schema: any) => {
+export const validateData = async (data: any, schema: any) => {
   try {
-    await schema.validate(data, schema);
+    await schema.validateAsync(data);
   } catch (err: any) {
     throw new Error(err);
   }
@@ -32,8 +32,8 @@ export const generateKeyPair = () => {
     privateKeyEncoding: {
       type: 'pkcs8',
       format: 'pem',
-      cipher: 'aes-256-cbc'
-      // passphrase: 'top secret'
+      cipher: 'aes-256-cbc',
+      passphrase: 'top secret'
     }
   });
 
@@ -46,17 +46,19 @@ export const signData = (data: object, privateKey: string) => {
     Buffer.from(convertDataToString(data), 'utf-8'),
     {
       key: privateKey,
-      padding: crypto.constants.RSA_PKCS1_PSS_PADDING
+      padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
+      passphrase: 'top secret'
     }
   );
   return signature.toString('base64');
 };
 
 export const verifySignature = (
-  data: object,
+  data: any,
   publicKey: string,
   signature: string
 ) => {
+  delete data['signature'];
   const isVerified = crypto.verify(
     'sha256',
     Buffer.from(convertDataToString(data)),
