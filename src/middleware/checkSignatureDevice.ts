@@ -7,7 +7,8 @@ export const checkSignatureDeviceExistence = async (
   next: NextFunction
 ) => {
   const signatureDevice = await deviceService.readById(
-    req.body.transaction.deviceId
+    req.body.transaction.deviceId,
+    false
   );
 
   if (signatureDevice && signatureDevice.id) {

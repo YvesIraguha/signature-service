@@ -12,6 +12,7 @@ const transactionRoutes_1 = __importDefault(require("./src/transactionRoutes"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+const serverUrl = process.env.SERVER_URL || 'http://localhost:3000';
 app.get('/', (req, res) => {
     res.status(200).send({ message: 'Welcome to signature service API' });
 });
@@ -30,7 +31,7 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:3000',
+                url: serverUrl,
                 description: 'Signature device server'
             }
         ]

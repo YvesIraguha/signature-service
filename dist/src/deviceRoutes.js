@@ -18,9 +18,6 @@ const routes = (0, express_1.Router)();
  *        - description
  *        - signatureAlgorithm
  *      properties:
- *        id:
- *          type: UUID
- *          description: auto-generated UUID of a device
  *        description:
  *          type: string
  *          description: label of the device for display in application
@@ -39,10 +36,6 @@ const routes = (0, express_1.Router)();
  *        publicKey:
  *          type: string
  *          description: second member of the key-pairs of this device to use while verifying the signature
- *        transactions:
- *          type: array
- *          items:
- *             $ref: '#/components/schemas/Transaction'
  *      example:
  *        publicKey: implicitly generated key
  *        signatureAlgorithm: rsa | ecc
@@ -51,7 +44,23 @@ const routes = (0, express_1.Router)();
  *        id: 123e4567-e89b-12d3-a456-426614174000
  *        description: rsa signature device
  *        status: ACTIVE
- *
+ *    Signature:
+ *      type: object
+ *      description: signature of a signed transaction
+ *      properties:
+ *        value:
+ *          type: string
+ *          description: actual signature of the transaction
+ *        algorithm:
+ *          type: string
+ *          description: algorithm used to sign the transaction
+ *        publicKey:
+ *           type: string
+ *           description: the public key which can be used to verify the signature
+ *      example:
+ *        value: HXGDJAA
+ *        algorithm: rsa
+ *        publicKey: HDkhad
  *    Transaction:
  *      type: object
  *      required:
@@ -96,22 +105,9 @@ const routes = (0, express_1.Router)();
  *        paymentMethod:
  *          type: string
  *          description: methods through which transfer of value (money) occurred
- *        signature:
- *          type: object
- *          description: signature of a signed transaction
- *          properties:
- *            value:
- *              type: string
- *              description: actual signature of the transaction
- *            algorithm:
- *              type: string
- *              description: algorithm used to sign the transaction
- *            publicKey:
- *              type: string
- *              description: the public key which can be used to verify the signature
  *      example:
- *        id: 123a4487-e89b-12d3-a456-426614174000
- *        timeOfTransaction: 111111
+ *        number: 15
+ *        timeOfTransaction: 2022-03-13T18:12:56.374Z
  *        place: Ruger Mall
  *        price: 300
  *        currency: Naira
@@ -120,10 +116,39 @@ const routes = (0, express_1.Router)();
  *        quantity: 3
  *        totalAmount: 900
  *        item: hair products
- *        signature:
- *          value: HXGDJAA
- *          algorithm: rsa
- *          publicKey: HDkhad
+ *    ExtendedDevice:
+ *      allOf:
+ *        - $ref: '#/components/schemas/Device'
+ *        - id:
+ *            type: UUID
+ *            description: auto-generated UUID of a device
+ *            example: '123a4487-e89b-12d3-a456-426614174000'
+ *        - type: object
+ *          description: transactions signed by a given device
+ *          properties:
+ *            transactions:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Transaction'
+ *
+ *    SignedTransaction:
+ *      allOf:
+ *        - $ref: '#/components/schemas/Transaction'
+ *        - id:
+ *            type: UUID
+ *            description: auto-generated UUID of a device
+ *            example: '123a4487-e89b-12d3-a456-426614174000'
+ *        - type: object
+ *          description: transactions signed by a given device
+ *          properties:
+ *            signature:
+ *              $ref: '#/components/schemas/Signature'
+ *      example:
+ *        allOf:
+ *          - $ref: '#/components/schemas/Transaction/example'
+ *          - id: '123a4487-e89b-12d3-a456-426614174000'
+ *          - signature:
+ *              $ref: '#/components/schemas/Signature/example'
  *
  */
 /**
@@ -134,37 +159,46 @@ const routes = (0, express_1.Router)();
  */
 /**
  * @swagger
+ *
  * /devices:
- *   get:
- *     summary: Returns all devices
- *     tags: [Devices]
- *     responses:
- *       200:
- *         description: the list of all devices
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Device'
- *   post:
- *     summary: Create a new device
- *     tags: [Devices]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Device'
- *     responses:
- *       201:
- *         description: The device was successfully created
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Device'
- *       500:
- *         description: Some server error
+ *  get:
+ *    summary: Returns all devices
+ *    tags: [Devices]
+ *    responses:
+ *      200:
+ *        description: the list of all devices
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Device'
+ *  post:
+ *    summary: Create a new device
+ *    tags: [Devices]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - description
+ *            properties:
+ *              description:
+ *                type: string
+ *                description: label of the device for display in application
+ *    responses:
+ *      201:
+ *        description: The device was successfully created
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Device'
+ *      400:
+ *        description: bad request (invalid input)
+ *      500:
+ *        description: Some server error
  */
 routes
     .route('/devices')
@@ -181,7 +215,7 @@ routes
  *         name: deviceId
  *         description: id of device
  *         schema:
- *           type: UUID
+ *           type: string
  *         required: true
  *     responses:
  *       200:
@@ -200,16 +234,22 @@ routes
  *     parameters:
  *       - in : path
  *         name: deviceId
- *         description: id of device
+ *         description: id of a device to be updated
  *         schema:
- *           type: UUID
+ *           type: string
  *         required: true
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Device'
+ *            schema:
+ *              type: object
+ *              required:
+ *                - description
+ *              properties:
+ *                description:
+ *                  type: string
+ *                  description: label of the device for display in application
  *     responses:
  *       201:
  *         description: device has been updated successfully
@@ -217,6 +257,8 @@ routes
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Device'
+ *       400:
+ *         description: Bad request (invalid input)
  *       404:
  *         description: device with provided id doesn't exist
  *       500:
@@ -229,13 +271,20 @@ routes
  *         name: deviceId
  *         description: id of device
  *         schema:
- *           type: UUID
+ *           type: string
  *         required: true
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
+ *             type: object
+ *             required:
+ *               - description
+ *             properties:
+ *               description:
+ *                  type: string
+ *                  description: description of signature service device
  *             $ref: '#/components/schemas/Device'
  *     responses:
  *       201:
@@ -244,6 +293,8 @@ routes
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Device'
+ *       400:
+ *         description: Bad request (invalid input)
  *       404:
  *         description: device with provided id doesn't exist
  *       500:
@@ -256,15 +307,11 @@ routes
  *         name: deviceId
  *         description: id of device
  *         schema:
- *           type: UUID
+ *           type: string
  *         required: true
  *     responses:
- *       201:
+ *       204:
  *         description: device deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Device'
  *       404:
  *         description: device with provided id doesn't exist
  *       500:
@@ -287,7 +334,7 @@ routes
  *         name: deviceId
  *         description: id of device
  *         schema:
- *           type: UUID
+ *           type: string
  *         required: true
  *     responses:
  *       200:
@@ -295,7 +342,7 @@ routes
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Device'
+ *               $ref: '#/components/schemas/ExtendedDevice'
  *       404:
  *         description: device with provided id doesn't exist
  *       500:

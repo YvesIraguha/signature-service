@@ -34,17 +34,15 @@ class DeviceDA {
             return newDevice;
         });
     }
-    getDeviceById(id) {
+    getDeviceById(id, excludePrivateKey = true) {
         return __awaiter(this, void 0, void 0, function* () {
             log(id);
-            return this.DeviceModel.findByPk(id
-            //   {
-            //   attributes: { exclude: ['privateKey'] }
-            // }
-            );
+            return this.DeviceModel.findByPk(id, excludePrivateKey && {
+                attributes: { exclude: ['privateKey'] }
+            });
         });
     }
-    getDevices(limit = 25, page = 0) {
+    getDevices() {
         return __awaiter(this, void 0, void 0, function* () {
             return this.DeviceModel.findAll({
                 attributes: { exclude: ['privateKey'] }
@@ -65,7 +63,8 @@ class DeviceDA {
     getDeviceWithTransactions(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.DeviceModel.findByPk(id, {
-                include: { model: this.TxModel, as: 'transactions' }
+                include: { model: this.TxModel, as: 'transactions' },
+                attributes: { exclude: ['privateKey'] }
             });
         });
     }

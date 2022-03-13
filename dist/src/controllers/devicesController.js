@@ -18,14 +18,14 @@ const log = (0, debug_1.default)('app:devices-controller');
 class DevicesController {
     listDevices(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const devices = yield deviceService_1.default.list(100, 0);
+            const devices = yield deviceService_1.default.list();
             res.status(200).send({ data: devices });
         });
     }
     getDeviceById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             log(req.params);
-            const device = yield deviceService_1.default.readById(req.params.deviceId);
+            const device = yield deviceService_1.default.readById(req.params.deviceId, true);
             if (device && device.id) {
                 return res.status(200).send({ data: device });
             }

@@ -24,9 +24,9 @@ class DevicesService {
             return devices_1.default.removeDeviceById(id);
         });
     }
-    list(limit, page) {
+    list() {
         return __awaiter(this, void 0, void 0, function* () {
-            return devices_1.default.getDevices(limit, page);
+            return devices_1.default.getDevices();
         });
     }
     patchById(id, resource) {
@@ -34,9 +34,9 @@ class DevicesService {
             return devices_1.default.updateDeviceById(id, resource);
         });
     }
-    readById(id) {
+    readById(id, excludePrivateKey) {
         return __awaiter(this, void 0, void 0, function* () {
-            return devices_1.default.getDeviceById(id);
+            return devices_1.default.getDeviceById(id, excludePrivateKey);
         });
     }
     putById(id, resource) {

@@ -6,13 +6,13 @@ const log: debug.IDebugger = debug('app:devices-controller');
 
 class DevicesController {
   async listDevices(req: Request, res: Response) {
-    const devices = await DevicesService.list(100, 0);
+    const devices = await DevicesService.list();
     res.status(200).send({ data: devices });
   }
 
   async getDeviceById(req: Request, res: Response) {
     log(req.params);
-    const device = await DevicesService.readById(req.params.deviceId);
+    const device = await DevicesService.readById(req.params.deviceId, true);
     if (device && device.id) {
       return res.status(200).send({ data: device });
     }

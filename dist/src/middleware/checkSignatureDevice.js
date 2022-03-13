@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkSignatureDeviceExistence = void 0;
 const deviceService_1 = __importDefault(require("../services/deviceService"));
 const checkSignatureDeviceExistence = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const signatureDevice = yield deviceService_1.default.readById(req.body.transaction.deviceId);
+    const signatureDevice = yield deviceService_1.default.readById(req.body.transaction.deviceId, false);
     if (signatureDevice && signatureDevice.id) {
         req.body.signatureDevice = signatureDevice;
         next();

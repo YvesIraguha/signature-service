@@ -13,16 +13,16 @@ class DevicesService implements CRUD {
     return DeviceDA.removeDeviceById(id);
   }
 
-  async list(limit: number, page: number) {
-    return DeviceDA.getDevices(limit, page);
+  async list() {
+    return DeviceDA.getDevices();
   }
 
   async patchById(id: string, resource: PatchDeviceInput) {
     return DeviceDA.updateDeviceById(id, resource);
   }
 
-  async readById(id: string) {
-    return DeviceDA.getDeviceById(id);
+  async readById(id: string, excludePrivateKey: boolean) {
+    return DeviceDA.getDeviceById(id, excludePrivateKey);
   }
 
   async putById(id: string, resource: PutDeviceInput) {
