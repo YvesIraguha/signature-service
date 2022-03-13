@@ -11,7 +11,7 @@ export const sampleDeviceResponse = {
   id: 'uuid-id',
   numberOfSignedTransactions: 0,
   publicKey: keyPairs.publicKey,
-  signatureAlgorithm: 'RSA',
+  signatureAlgorithm: 'rsa',
   status: 'ACTIVE',
   transactionDataEncoding: 'UTF-8',
   updatedAt: new Date('2022-03-10T21:11:21.972Z').toISOString()

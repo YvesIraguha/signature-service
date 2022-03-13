@@ -29,7 +29,8 @@ class TransactionDA {
     const {
       privateKey,
       publicKey,
-      numberOfSignedTransactions: signedTx
+      numberOfSignedTransactions: signedTx,
+      signatureAlgorithm
     } = deviceFields;
 
     const signature = signData(transaction, privateKey);
@@ -44,7 +45,7 @@ class TransactionDA {
       signature: {
         value: signature,
         publicKey,
-        algorithm: 'rsa'
+        algorithm: signatureAlgorithm
       }
     };
   }

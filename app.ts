@@ -18,12 +18,11 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Signature-device API',
+      title: 'Signature-service API',
       version: '1.0.0',
-      description:
-        'A signature service for managing devices to sign transactions   ',
+      description: `Our signature service can manage multiple signature devices. Such a device is identified by an unique identifier. It has a description which can be used to display used to display in the user interface, and a signature counter that tracks how many signatures have been signed with it. During creation, the signature algorithm of the associated key pair is provided by the creator of the device. Our devices can sign using either RSA or ECC. The associated signature algorithm cannot be changed afterwards!`,
       contact: {
-        name: 'Signature Device API support',
+        name: 'Signature service API support',
         // url: "http://www.exmaple.com/support",
         email: 'iragahaivos@gmail.com'
       }
