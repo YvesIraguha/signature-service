@@ -10,6 +10,7 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
+const serverUrl = process.env.SERVER_URL || 'http://localhost:3000';
 app.get('/', (req: Request, res: Response) => {
   res.status(200).send({ message: 'Welcome to signature service API' });
 });
@@ -30,7 +31,7 @@ const options = {
 
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: serverUrl,
         description: 'Signature device server'
       }
     ]

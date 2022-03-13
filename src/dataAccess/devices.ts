@@ -35,17 +35,17 @@ class DeviceDA {
     return newDevice;
   }
 
-  async getDeviceById(id: string) {
+  async getDeviceById(id: string, excludePrivateKey = true) {
     log(id);
     return this.DeviceModel.findByPk(
-      id
-      //   {
-      //   attributes: { exclude: ['privateKey'] }
-      // }
+      id,
+      excludePrivateKey && {
+        attributes: { exclude: ['privateKey'] }
+      }
     );
   }
 
-  async getDevices(limit = 25, page = 0) {
+  async getDevices() {
     return this.DeviceModel.findAll({
       attributes: { exclude: ['privateKey'] }
     });
@@ -68,7 +68,8 @@ class DeviceDA {
 
   async getDeviceWithTransactions(id: string) {
     return this.DeviceModel.findByPk(id, {
-      include: { model: this.TxModel, as: 'transactions' }
+      include: { model: this.TxModel, as: 'transactions' },
+      attributes: { exclude: ['privateKey'] }
     });
   }
 }

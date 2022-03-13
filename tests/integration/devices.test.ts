@@ -112,7 +112,7 @@ describe('/devices', () => {
       });
       it('should return no device with provided id', async () => {
         const deleteStub = sinon.stub(Devices, 'destroy');
-        deleteStub.returns([0]);
+        deleteStub.returns(0);
         const response = await request(app).delete(
           '/devices/9f28d121-fd36-493d-b432-9c4c6dff1632'
         );
@@ -126,8 +126,8 @@ describe('/devices', () => {
       it('should update device with provided id successfully', async () => {
         const updateStub = sinon.stub(Devices, 'update');
         updateStub.returns([
-          [1],
-          { ...sampleDeviceResponse, description: 'new description' }
+          1,
+          [{ ...sampleDeviceResponse, description: 'new description' }]
         ]);
         const response = await request(app)
           .put('/devices/923d5a4c-ca14-40d7-a28c-ad6068152885')
@@ -141,7 +141,7 @@ describe('/devices', () => {
       });
       it('should return no device with provided id', async () => {
         const updateStub = sinon.stub(Devices, 'update');
-        updateStub.returns([[0]]);
+        updateStub.returns([0, []]);
         const response = await request(app)
           .put('/devices/923d5a4c-ca14-40d7-a28c-ad6068152885')
           .send({ description: 'new description' });
@@ -180,8 +180,8 @@ describe('/devices', () => {
       it('should patch device with provided id successfully', async () => {
         const updateStub = sinon.stub(Devices, 'update');
         updateStub.returns([
-          [1],
-          { ...sampleDeviceResponse, description: 'new description' }
+          1,
+          [{ ...sampleDeviceResponse, description: 'new description' }]
         ]);
         const response = await request(app)
           .patch('/devices/923d5a4c-ca14-40d7-a28c-ad6068152885')
@@ -195,7 +195,7 @@ describe('/devices', () => {
 
       it('should patch device without description provided', async () => {
         const updateStub = sinon.stub(Devices, 'update');
-        updateStub.returns([[1], sampleDeviceResponse]);
+        updateStub.returns([1, [sampleDeviceResponse]]);
         const response = await request(app)
           .patch('/devices/923d5a4c-ca14-40d7-a28c-ad6068152885')
           .send({});
