@@ -46,7 +46,7 @@ const generateKeyPair = () => {
             type: 'pkcs8',
             format: 'pem',
             cipher: 'aes-256-cbc',
-            passphrase: 'top secret'
+            passphrase: process.env.PASSPHRASE
         }
     });
     return { publicKey, privateKey };
