@@ -10,7 +10,7 @@ export const checkSignatureDeviceExistence = async (
     req.body.transaction.deviceId
   );
 
-  if (signatureDevice.id) {
+  if (signatureDevice && signatureDevice.id) {
     req.body.signatureDevice = signatureDevice;
     next();
     return;

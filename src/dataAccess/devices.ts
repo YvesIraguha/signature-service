@@ -37,9 +37,12 @@ class DeviceDA {
 
   async getDeviceById(id: string) {
     log(id);
-    return this.DeviceModel.findByPk(id, {
-      attributes: { exclude: ['privateKey'] }
-    });
+    return this.DeviceModel.findByPk(
+      id
+      //   {
+      //   attributes: { exclude: ['privateKey'] }
+      // }
+    );
   }
 
   async getDevices(limit = 25, page = 0) {

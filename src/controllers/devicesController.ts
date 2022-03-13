@@ -13,7 +13,7 @@ class DevicesController {
   async getDeviceById(req: Request, res: Response) {
     log(req.params);
     const device = await DevicesService.readById(req.params.deviceId);
-    if (device.id) {
+    if (device && device.id) {
       return res.status(200).send({ data: device });
     }
     res.status(404).send({ error: 'There is not device with provided id' });
@@ -25,7 +25,7 @@ class DevicesController {
   }
 
   async put(req: Request, res: Response) {
-    const [[numberOfUpdatedDevices], updatedDevice] =
+    const [numberOfUpdatedDevices, [updatedDevice]] =
       await DevicesService.putById(req.params.deviceId, req.body);
 
     if (numberOfUpdatedDevices) {
@@ -37,10 +37,8 @@ class DevicesController {
   }
 
   async removeDevice(req: Request, res: Response) {
-    const [deletedDevice] = await DevicesService.deleteById(
-      req.params.deviceId
-    );
-    if (deletedDevice) return res.status(204).send();
+    const output = await DevicesService.deleteById(req.params.deviceId);
+    if (output) return res.status(204).send();
     res.status(404).send({ error: 'There is not device with provided id' });
   }
 

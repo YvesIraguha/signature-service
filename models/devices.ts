@@ -32,15 +32,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       description: { type: DataTypes.STRING, allowNull: false },
       publicKey: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+        type: DataTypes.TEXT,
+        allowNull: false
       },
 
       privateKey: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+        type: DataTypes.TEXT,
+        allowNull: false
       },
       signatureAlgorithm: {
         type: DataTypes.STRING,

@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
+import dotenv from 'dotenv';
 import crypto from 'crypto';
+
+dotenv.config();
 
 type callback = (req: Request, res: Response) => Promise<any>;
 
@@ -47,7 +50,7 @@ export const signData = (data: object, privateKey: string) => {
     {
       key: privateKey,
       padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
-      passphrase: 'top secret'
+      passphrase: process.env.PASSPHRASE
     }
   );
   return signature.toString('base64');
