@@ -43,8 +43,6 @@ signature-service is a service which helps users to create devices which they ca
 - add authentication/authorization layer
 - refactor validators
 
-<<<<<<< HEAD
-
 ## Contributors
 
 - [YvesIraguha](https://yvesiraguha.github.io/portfolio/#/)
