@@ -22,25 +22,27 @@ signature-service is a service which helps users to create devices which they ca
 - `cd` into the repository
 - install both `dependencies` and `dev-dependencies` by running `npm run i`
 - ensure that you have content of dotenv
-  ````
+
+  ```
   DB_USERNAME=database_username
   DB_PASSWORD=database_password
   DB_NAME=database_name
   PASSPHRASE=secret passphrase
   SERVER_URL = server_url
-        ```
-  ````
+
+  ```
+
 - run migrations by running `npm run migrate`
 - start your local server by running `npm run dev`
 - Read this [documentation](https://signature-server.herokuapp.com/api-docs/) for available endpoints
 - run tests by running `npm run test`, tests should all pass.
 
-## Point for improvements
+## Points for improvement
 
 - add CI/CD, preferrably github actions
 - add authentication/authorization layer
 - refactor validators
 
-#### Contributors
+## Contributors
 
 - [YvesIraguha](https://yvesiraguha.github.io/portfolio/#/)

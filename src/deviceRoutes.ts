@@ -4,7 +4,7 @@ import { asyncHandler } from './helpers';
 import {
   validateDeviceSchema,
   validateUUIDSchema,
-  validateOptionDeviceSchema
+  validateOptionalDeviceSchema
 } from './middleware/validator';
 
 const routes: Router = Router();
@@ -38,7 +38,7 @@ const routes: Router = Router();
  *          description: second member of the key-pairs of this device to use while verifying the signature
  *      example:
  *        publicKey: implicitly generated key
- *        signatureAlgorithm: rsa | ecc
+ *        signatureAlgorithm: ec
  *        transactionDataEncoding: UTF-8
  *        numberOfSignedTransactions: 15
  *        id: 123e4567-e89b-12d3-a456-426614174000
@@ -186,10 +186,14 @@ const routes: Router = Router();
  *            type: object
  *            required:
  *              - description
+ *              - signatureAlgorithm
  *            properties:
  *              description:
  *                type: string
  *                description: label of the device for display in application
+ *              signatureAlgorithm:
+ *                type: string
+ *                description: one of rsa or ec for signing transactions
  *    responses:
  *      201:
  *        description: The device was successfully created
@@ -327,12 +331,12 @@ routes
   .delete(validateUUIDSchema, asyncHandler(DevicesController.removeDevice))
   .put(
     validateUUIDSchema,
-    validateDeviceSchema,
+    validateOptionalDeviceSchema,
     asyncHandler(DevicesController.put)
   )
   .patch(
     validateUUIDSchema,
-    validateOptionDeviceSchema,
+    validateOptionalDeviceSchema,
     asyncHandler(DevicesController.put)
   );
 

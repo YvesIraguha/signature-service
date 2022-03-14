@@ -24,10 +24,12 @@ export const validateData = async (data: any, schema: any) => {
 };
 
 const convertDataToString = (data: object) => JSON.stringify(data);
+const generateNameCurveOrModulus = (algorithm: any) =>
+  algorithm === 'rsa' ? { modulusLength: 4096 } : { namedCurve: 'secp256k1' };
 
-export const generateKeyPair = () => {
-  const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-    modulusLength: 4096,
+export const generateKeyPair = (algorithm: any) => {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync(algorithm, {
+    ...generateNameCurveOrModulus(algorithm),
     publicKeyEncoding: {
       type: 'spki',
       format: 'pem'

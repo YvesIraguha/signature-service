@@ -48,7 +48,7 @@ export const validateUUIDSchema = async (
   }
 };
 
-export const validateOptionDeviceSchema = async (
+export const validateOptionalDeviceSchema = async (
   req: Request,
   res: Response,
   next: NextFunction

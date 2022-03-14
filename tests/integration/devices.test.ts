@@ -34,7 +34,8 @@ describe('/devices', () => {
       const createStub = sinon.stub(Devices, 'create');
       createStub.returns(sampleDeviceResponse);
       const response = await request(app).post('/devices').send({
-        description: 'an RSA device to sign transactions'
+        description: 'an RSA device to sign transactions',
+        signatureAlgorithm: 'ec'
       });
       expect(response.status).toEqual(201);
       expect(response.body.data).toEqual(sampleDeviceResponse);
@@ -44,6 +45,7 @@ describe('/devices', () => {
       const createSpy = sinon.spy(Devices, 'create');
 
       const response = await request(app).post('/devices').send({
+        signatureAlgorithm: 'ec',
         name: 'hello'
       });
       expect(response.status).toEqual(400);
@@ -58,6 +60,7 @@ describe('/devices', () => {
 
       const response = await request(app).post('/devices').send({
         privateKey: 'hello',
+        signatureAlgorithm: 'ec',
         description: 'an RSA device to sign transactions'
       });
       expect(response.status).toEqual(400);
@@ -193,14 +196,16 @@ describe('/devices', () => {
         });
       });
 
-      it('should patch device without description provided', async () => {
+      it('should not patch device without description provided', async () => {
         const updateStub = sinon.stub(Devices, 'update');
         updateStub.returns([1, [sampleDeviceResponse]]);
         const response = await request(app)
           .patch('/devices/923d5a4c-ca14-40d7-a28c-ad6068152885')
           .send({});
-        expect(response.status).toEqual(201);
-        expect(response.body.data).toEqual(sampleDeviceResponse);
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual({
+          error: 'ValidationError: "description" is required'
+        });
       });
     });
     describe('/transactions', () => {

@@ -19,13 +19,14 @@ class DeviceDA {
 
   async addDevice(deviceFields: CreateDeviceInput) {
     const id = uuidv4();
-    const { publicKey, privateKey } = generateKeyPair();
+    const { publicKey, privateKey } = generateKeyPair(
+      deviceFields.signatureAlgorithm
+    );
     const device = {
       ...deviceFields,
       id,
       publicKey,
       privateKey,
-      signatureAlgorithm: 'rsa',
       transactionDataEncoding: 'utf-8',
       status: 'ACTIVE',
       numberOfSignedTransactions: 0
