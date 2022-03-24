@@ -13,7 +13,7 @@ class DevicesService implements CRUD, Associations {
     this.deviceDataAccess = dataAccessInstance;
   }
 
-  async create(resource: CreateDeviceInput) {
+  create(resource: CreateDeviceInput) {
     const id = uuidv4();
     const { publicKey, privateKey } = generateKeyPair(
       resource.signatureAlgorithm
@@ -30,26 +30,26 @@ class DevicesService implements CRUD, Associations {
     return this.deviceDataAccess.addDevice(device);
   }
 
-  async deleteById(id: string) {
+  deleteById(id: string) {
     return this.deviceDataAccess.removeDeviceById(id);
   }
 
-  async list() {
+  list() {
     return this.deviceDataAccess.getDevices();
   }
 
-  async patchById(id: string, resource: PatchDeviceInput) {
+  patchById(id: string, resource: PatchDeviceInput) {
     return this.deviceDataAccess.updateDeviceById(id, resource);
   }
 
-  async readById(id: string, excludePrivateKey: boolean) {
+  readById(id: string, excludePrivateKey: boolean) {
     return this.deviceDataAccess.getDeviceById(id, excludePrivateKey);
   }
 
-  async putById(id: string, resource: PutDeviceInput) {
+  putById(id: string, resource: PutDeviceInput) {
     return this.deviceDataAccess.updateDeviceById(id, resource);
   }
-  async readAssociationsById(id: string) {
+  readAssociationsById(id: string) {
     return this.deviceDataAccess.getDeviceWithTransactions(id);
   }
 }

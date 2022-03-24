@@ -24,18 +24,21 @@ export class DeviceDA implements IDeviceDA {
 
   async getDeviceById(id: string, excludePrivateKey = true) {
     log(id);
-    return this.DeviceModel.findByPk(
+    const device = await this.DeviceModel.findByPk(
       id,
       excludePrivateKey && {
         attributes: { exclude: ['privateKey'] }
       }
     );
+
+    return device;
   }
 
   async getDevices() {
-    return this.DeviceModel.findAll({
+    const devices = await this.DeviceModel.findAll({
       attributes: { exclude: ['privateKey'] }
     });
+    return devices;
   }
 
   async updateDeviceById(
@@ -50,7 +53,8 @@ export class DeviceDA implements IDeviceDA {
   }
 
   async removeDeviceById(id: string) {
-    return this.DeviceModel.destroy({ where: { id } });
+    const removedDevice = await this.DeviceModel.destroy({ where: { id } });
+    return removedDevice;
   }
 
   async updateNumberOfSignedTransactions(id: string) {
@@ -62,10 +66,11 @@ export class DeviceDA implements IDeviceDA {
   }
 
   async getDeviceWithTransactions(id: string) {
-    return this.DeviceModel.findByPk(id, {
+    const deviceWithTransactions = await this.DeviceModel.findByPk(id, {
       include: { model: this.TxModel, as: 'transactions' },
       attributes: { exclude: ['privateKey'] }
     });
+    return deviceWithTransactions;
   }
 }
 
