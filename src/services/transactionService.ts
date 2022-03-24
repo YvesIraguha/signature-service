@@ -42,12 +42,12 @@ class TransactionService {
     };
   }
 
-  async createSignature(transaction: any, privateKey: string) {
+  createSignature(transaction: any, privateKey: string) {
     const signature = signData(transaction, privateKey);
     return signature;
   }
 
-  async verifySignedData(resource: Transaction) {
+  verifySignedData(resource: Transaction) {
     return verifySignature(
       resource,
       resource.signature.publicKey,
