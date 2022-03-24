@@ -63,11 +63,13 @@ export const verifyTransactionSchema = Joi.object().keys({
     .required()
 });
 
-export const uuidSchema = Joi.string()
-  .trim()
-  .guid({
-    version: ['uuidv4']
-  });
+export const uuidSchema = Joi.object().keys({
+  deviceId: Joi.string()
+    .trim()
+    .guid({
+      version: ['uuidv4']
+    })
+});
 
 export const optionalFieldsDeviceSchema = Joi.object().keys({
   // signatureAlgorithm: Joi.string().trim().min(3).required(),

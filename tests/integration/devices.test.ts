@@ -99,7 +99,7 @@ describe('/devices', () => {
         const response = await request(app).get('/devices/1');
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual(
-          'ValidationError: "value" must be a valid GUID'
+          'ValidationError: "deviceId" must be a valid GUID'
         );
       });
     });
