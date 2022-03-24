@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { validateData } from '../helpers';
 
 import {
@@ -9,67 +9,23 @@ import {
   uuidSchema
 } from '../schema';
 
-export const validateDeviceSchema = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await validateData(req.body, deviceSchema);
-    next();
-  } catch (err: any) {
-    res.status(400).send({ error: err.message });
-  }
-};
+const validateSchema =
+  (schema: any, requestKey = 'body') =>
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      await validateData(req[requestKey], schema);
+      next();
+    } catch (err: any) {
+      res.status(400).send({ error: err.message });
+    }
+  };
 
-export const validateTransactionSchema = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await validateData(req.body, transactionSchema);
-    next();
-  } catch (err: any) {
-    res.status(400).send({ error: err.message });
-  }
-};
-
-export const validateUUIDSchema = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await validateData(req.params.deviceId, uuidSchema);
-    next();
-  } catch (err: any) {
-    res.status(400).send({ error: err.message });
-  }
-};
-
-export const validateOptionalDeviceSchema = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await validateData(req.body, optionalFieldsDeviceSchema);
-    next();
-  } catch (err: any) {
-    res.status(400).send({ error: err.message });
-  }
-};
-
-export const validateSignedTransactionSchema = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await validateData(req.body, verifyTransactionSchema);
-    next();
-  } catch (err: any) {
-    res.status(400).send({ error: err.message });
-  }
-};
+export const validateDeviceSchema = validateSchema(deviceSchema);
+export const validateTransactionSchema = validateSchema(transactionSchema);
+export const validateUUIDSchema = validateSchema(uuidSchema, 'params');
+export const validateOptionalDeviceSchema = validateSchema(
+  optionalFieldsDeviceSchema
+);
+export const validateSignedTransactionSchema = validateSchema(
+  verifyTransactionSchema
+);
