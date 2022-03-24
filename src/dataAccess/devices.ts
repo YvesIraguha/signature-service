@@ -1,38 +1,24 @@
-import { v4 as uuidv4 } from 'uuid';
 import debug from 'debug';
 import models from '../../models';
-
 import CreateDeviceInput from '../interfaces/createDevice';
 import PatchDeviceInput from '../interfaces/patchDevice';
 import PutDeviceInput from '../interfaces/putDevice';
-import { generateKeyPair } from '../helpers/index';
+import { IDeviceDA } from '../interfaces/IDeviceDA';
 
 const log: debug.IDebugger = debug('app:signature-device-da');
 
-class DeviceDA {
-  DeviceModel = models.Device;
-  TxModel = models.Transaction;
+export class DeviceDA implements IDeviceDA {
+  DeviceModel: any;
+  TxModel: any;
 
-  constructor() {
+  constructor(devicesModel: any, transactionsModel: any) {
     log('Created a new instance of  device DA');
+    this.DeviceModel = devicesModel;
+    this.TxModel = transactionsModel;
   }
 
   async addDevice(deviceFields: CreateDeviceInput) {
-    const id = uuidv4();
-    const { publicKey, privateKey } = generateKeyPair(
-      deviceFields.signatureAlgorithm
-    );
-    const device = {
-      ...deviceFields,
-      id,
-      publicKey,
-      privateKey,
-      transactionDataEncoding: 'utf-8',
-      status: 'ACTIVE',
-      numberOfSignedTransactions: 0
-    };
-
-    const newDevice = await this.DeviceModel.create(device);
+    const newDevice = await this.DeviceModel.create(deviceFields);
     return newDevice;
   }
 
@@ -67,6 +53,14 @@ class DeviceDA {
     return this.DeviceModel.destroy({ where: { id } });
   }
 
+  async updateNumberOfSignedTransactions(id: string) {
+    const updatedDevice = await this.DeviceModel.increment(
+      { numberOfSignedTransactions: 1 },
+      { returning: true, where: { id } }
+    );
+    return updatedDevice;
+  }
+
   async getDeviceWithTransactions(id: string) {
     return this.DeviceModel.findByPk(id, {
       include: { model: this.TxModel, as: 'transactions' },
@@ -75,4 +69,4 @@ class DeviceDA {
   }
 }
 
-export default new DeviceDA();
+export default new DeviceDA(models.Device, models.Transaction);
