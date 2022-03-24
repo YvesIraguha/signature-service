@@ -7,5 +7,5 @@ export default interface CreateDeviceInput {
   numberOfSignedTransactions: number;
   id: string;
   description: string;
-  status: status;
+  status: string;
 }

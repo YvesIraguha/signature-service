@@ -43,13 +43,13 @@ describe('/sign-tx', () => {
       const createTransactionStub = sinon.stub(Transactions, 'create');
 
       const findByPkStub = sinon.stub(Devices, 'findByPk');
-      const putById = sinon.stub(Devices, 'update');
+      const incrementById = sinon.stub(Devices, 'increment');
       findByPkStub.returns({
         ...sampleDeviceResponse,
         privateKey: keyPairs.privateKey
       });
       createTransactionStub.returns(sampleTransactionInput);
-      putById.returns([[1], {}]);
+      incrementById.returns([[1], {}]);
       const response = await request(app)
         .post('/sign-tx')
         .send({ transaction: sampleTransactionInput });

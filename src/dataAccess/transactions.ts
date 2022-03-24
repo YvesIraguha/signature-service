@@ -1,54 +1,21 @@
-import { v4 as uuidv4 } from 'uuid';
 import debug from 'debug';
 import models from '../../models';
-
 import SignTransactionInput from '../interfaces/transaction';
-import deviceService from '../services/deviceService';
-import { signData } from '../helpers';
-import CreateDeviceInput from '../interfaces/createDevice';
+import { ITransactionDA } from '../interfaces/ITransactionDA';
 
 const log: debug.IDebugger = debug('app:signature-device-da');
 
-class TransactionDA {
-  TransactionModel = models.Transaction;
-
-  constructor() {
+export class TransactionDA implements ITransactionDA {
+  TransactionModel: any;
+  constructor(transactionModel: any) {
     log('Created a new instance of signature device DA');
+    this.TransactionModel = transactionModel;
   }
 
-  async addTransaction(
-    transactionFields: SignTransactionInput,
-    deviceFields: CreateDeviceInput
-  ) {
-    const id = uuidv4();
-    const transaction = {
-      ...transactionFields,
-      id
-    };
-
-    const {
-      privateKey,
-      publicKey,
-      numberOfSignedTransactions: signedTx,
-      signatureAlgorithm
-    } = deviceFields;
-
-    const signature = signData(transaction, privateKey);
-    const numberOfSignedTransactions = signedTx + 1;
-    await this.TransactionModel.create(transaction);
-    await deviceService.putById(transactionFields.deviceId, {
-      numberOfSignedTransactions
-    });
-
-    return {
-      ...transaction,
-      signature: {
-        value: signature,
-        publicKey,
-        algorithm: signatureAlgorithm
-      }
-    };
+  async addTransaction(transaction: SignTransactionInput) {
+    const createdTransaction = await this.TransactionModel.create(transaction);
+    return createdTransaction;
   }
 }
 
-export default new TransactionDA();
+export default new TransactionDA(models.Transaction);
